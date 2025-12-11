@@ -45,7 +45,7 @@ export async function DELETE() {
 }
 
 export async function GET() {
-    const cookieStore = await cookies();
+    const cookieStore = cookies();
     const session = cookieStore.get('admin_session');
 
     if (session?.value && validateAccessToken(session.value)) {
