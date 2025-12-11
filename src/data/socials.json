@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "name": "GitHub",
+    "url": "https://github.com/kajonsak002",
+    "icon": "github"
+  },
+  {
+    "id": "2",
+    "name": "LinkedIn",
+    "url": "#",
+    "icon": "linkedin"
+  },
+  {
+    "id": "3",
+    "name": "Twitter",
+    "url": "#",
+    "icon": "twitter"
+  }
+]

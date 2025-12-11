@@ -1,0 +1,85 @@
+{
+    "skills": [
+        {
+            "id": "1",
+            "name": "React",
+            "icon": "⚛️"
+        },
+        {
+            "id": "2",
+            "name": "Next.js",
+            "icon": "▲"
+        },
+        {
+            "id": "3",
+            "name": "Node.js",
+            "icon": "🟢"
+        },
+        {
+            "id": "4",
+            "name": "NestJS",
+            "icon": "🐱"
+        },
+        {
+            "id": "5",
+            "name": "Express",
+            "icon": "🚀"
+        },
+        {
+            "id": "6",
+            "name": "TypeScript",
+            "icon": "📘"
+        },
+        {
+            "id": "7",
+            "name": "JavaScript",
+            "icon": "💛"
+        },
+        {
+            "id": "8",
+            "name": "Python",
+            "icon": "🐍"
+        },
+        {
+            "id": "9",
+            "name": "PHP",
+            "icon": "🐘"
+        }
+    ],
+    "techStack": [
+        {
+            "id": "1",
+            "name": "Frontend",
+            "items": [
+                "React",
+                "Next.js",
+                "Vue"
+            ]
+        },
+        {
+            "id": "2",
+            "name": "Backend",
+            "items": [
+                "Node.js",
+                "Express",
+                "NestJS"
+            ]
+        },
+        {
+            "id": "3",
+            "name": "Database",
+            "items": [
+                "PostgreSQL",
+                "MongoDB"
+            ]
+        },
+        {
+            "id": "4",
+            "name": "AI/ML",
+            "items": [
+                "YOLOv8",
+                "AI FOR THAI"
+            ]
+        }
+    ]
+}

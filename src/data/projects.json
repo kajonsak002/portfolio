@@ -1,0 +1,59 @@
+[
+  {
+    "id": "1",
+    "title": "PROMPJAIPLUS",
+    "description": "Collaborative TypeScript project. Modern web application with full-stack development.",
+    "tags": [
+      "TypeScript",
+      "Next.js",
+      "Team Project"
+    ],
+    "link": "https://github.com/StartGackt/PROMPJAIPLUS",
+    "featured": true
+  },
+  {
+    "id": "2",
+    "title": "Final Project",
+    "description": "Comprehensive full-stack project built with JavaScript. Showcasing modern development practices.",
+    "tags": [
+      "JavaScript",
+      "Full-Stack"
+    ],
+    "link": "https://github.com/kajonsak002/final_project",
+    "featured": false
+  },
+  {
+    "id": "3",
+    "title": "Cafe Shop Website",
+    "description": "PHP-based cafe shop website project for web development course.",
+    "tags": [
+      "PHP",
+      "Web Development"
+    ],
+    "link": "https://github.com/kajonsak002/project-website2-php",
+    "featured": false
+  },
+  {
+    "id": "4",
+    "title": "YOLOv8 Live Detection",
+    "description": "Real-time video analytics app using YOLOv8 and Supervision for object detection.",
+    "tags": [
+      "Python",
+      "YOLOv8",
+      "AI/ML"
+    ],
+    "link": "https://github.com/kajonsak002/yolov8-live",
+    "featured": false
+  },
+  {
+    "id": "5",
+    "title": "AI Chat Web App",
+    "description": "Web chat application learning AI FOR THAI. Building conversational AI experiences.",
+    "tags": [
+      "Python",
+      "AI FOR THAI"
+    ],
+    "link": "https://github.com/kajonsak002/webchat",
+    "featured": false
+  }
+]
