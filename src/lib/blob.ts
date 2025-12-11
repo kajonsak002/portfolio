@@ -1,4 +1,4 @@
-import { put, list, del } from '@vercel/blob';
+import { put, list, del, head } from '@vercel/blob';
 
 const BLOB_PREFIX = 'portfolio-data/';
 
@@ -30,27 +30,55 @@ const defaultData: Record<string, unknown> = {
     'socials.json': []
 };
 
+// Cache for blob URLs to avoid repeated list calls
+const blobUrlCache: Record<string, { url: string; timestamp: number }> = {};
+const CACHE_TTL = 5000; // 5 seconds cache
+
 /**
  * Read JSON data from Vercel Blob
  */
 export async function readBlobData<T>(key: string): Promise<T> {
+    const fullKey = BLOB_PREFIX + key;
+
     try {
-        const { blobs } = await list({ prefix: BLOB_PREFIX + key });
+        // Check cache first
+        const cached = blobUrlCache[fullKey];
+        if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+            try {
+                const response = await fetch(cached.url);
+                if (response.ok) {
+                    return await response.json() as T;
+                }
+            } catch {
+                // Cache miss, continue to list
+            }
+        }
+
+        // List blobs with the prefix
+        const { blobs } = await list({ prefix: fullKey });
 
         if (blobs.length === 0) {
-            // No blob found, return default data
+            // No blob found, seed with default data
             const defaultValue = defaultData[key];
             if (defaultValue !== undefined) {
-                // Seed the data to blob
+                console.log(`Seeding default data for ${key}`);
                 await writeBlobData(key, defaultValue);
                 return defaultValue as T;
             }
             throw new Error(`No data found for ${key}`);
         }
 
-        // Get the most recent blob
+        // Get the first matching blob
         const blob = blobs[0];
+
+        // Update cache
+        blobUrlCache[fullKey] = { url: blob.url, timestamp: Date.now() };
+
         const response = await fetch(blob.url);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch blob: ${response.status}`);
+        }
+
         const data = await response.json();
         return data as T;
     } catch (error) {
@@ -68,18 +96,30 @@ export async function readBlobData<T>(key: string): Promise<T> {
  * Write JSON data to Vercel Blob
  */
 export async function writeBlobData<T>(key: string, data: T): Promise<void> {
+    const fullKey = BLOB_PREFIX + key;
+
     try {
-        // Delete existing blob(s) with this key
-        const { blobs } = await list({ prefix: BLOB_PREFIX + key });
+        // Delete existing blob(s) with this key first
+        const { blobs } = await list({ prefix: fullKey });
         for (const blob of blobs) {
-            await del(blob.url);
+            try {
+                await del(blob.url);
+            } catch (deleteError) {
+                console.warn(`Failed to delete old blob:`, deleteError);
+            }
         }
 
-        // Write new blob
-        await put(BLOB_PREFIX + key, JSON.stringify(data, null, 2), {
+        // Write new blob with addRandomSuffix: false to keep consistent naming
+        const result = await put(fullKey, JSON.stringify(data, null, 2), {
             access: 'public',
             contentType: 'application/json',
+            addRandomSuffix: false, // Important: keep consistent file path
         });
+
+        // Update cache with new URL
+        blobUrlCache[fullKey] = { url: result.url, timestamp: Date.now() };
+
+        console.log(`Successfully wrote blob ${key} to ${result.url}`);
     } catch (error) {
         console.error(`Error writing blob ${key}:`, error);
         throw error;
