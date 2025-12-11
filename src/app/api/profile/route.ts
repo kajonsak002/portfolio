@@ -1,14 +1,13 @@
 import { NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
-
-const dataPath = path.join(process.cwd(), 'src/data/profile.json');
+import { readBlobData, writeBlobData } from '@/lib/blob';
+import { Profile } from '@/types/portfolio';
 
 export async function GET() {
     try {
-        const data = await fs.readFile(dataPath, 'utf-8');
-        return NextResponse.json(JSON.parse(data));
+        const profile = await readBlobData<Profile>('profile.json');
+        return NextResponse.json(profile);
     } catch (error) {
+        console.error('Failed to read profile:', error);
         return NextResponse.json({ error: 'Failed to read profile' }, { status: 500 });
     }
 }
@@ -16,9 +15,10 @@ export async function GET() {
 export async function PUT(request: Request) {
     try {
         const body = await request.json();
-        await fs.writeFile(dataPath, JSON.stringify(body, null, 2));
+        await writeBlobData('profile.json', body);
         return NextResponse.json({ success: true, data: body });
     } catch (error) {
+        console.error('Failed to update profile:', error);
         return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 });
     }
 }

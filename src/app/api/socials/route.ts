@@ -1,15 +1,13 @@
 import { NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { readBlobData, writeBlobData } from '@/lib/blob';
 import { Social } from '@/types/portfolio';
-
-const dataPath = path.join(process.cwd(), 'src/data/socials.json');
 
 export async function GET() {
     try {
-        const data = await fs.readFile(dataPath, 'utf-8');
-        return NextResponse.json(JSON.parse(data));
+        const socials = await readBlobData<Social[]>('socials.json');
+        return NextResponse.json(socials);
     } catch (error) {
+        console.error('Failed to read socials:', error);
         return NextResponse.json({ error: 'Failed to read socials' }, { status: 500 });
     }
 }
@@ -17,15 +15,15 @@ export async function GET() {
 export async function POST(request: Request) {
     try {
         const newSocial: Social = await request.json();
-        const data = await fs.readFile(dataPath, 'utf-8');
-        const socials: Social[] = JSON.parse(data);
+        const socials = await readBlobData<Social[]>('socials.json');
 
         newSocial.id = Date.now().toString();
         socials.push(newSocial);
 
-        await fs.writeFile(dataPath, JSON.stringify(socials, null, 2));
+        await writeBlobData('socials.json', socials);
         return NextResponse.json({ success: true, data: newSocial });
     } catch (error) {
+        console.error('Failed to add social:', error);
         return NextResponse.json({ error: 'Failed to add social' }, { status: 500 });
     }
 }
@@ -33,14 +31,14 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
     try {
         const updatedSocial: Social = await request.json();
-        const data = await fs.readFile(dataPath, 'utf-8');
-        let socials: Social[] = JSON.parse(data);
+        let socials = await readBlobData<Social[]>('socials.json');
 
         socials = socials.map(s => s.id === updatedSocial.id ? updatedSocial : s);
 
-        await fs.writeFile(dataPath, JSON.stringify(socials, null, 2));
+        await writeBlobData('socials.json', socials);
         return NextResponse.json({ success: true, data: updatedSocial });
     } catch (error) {
+        console.error('Failed to update social:', error);
         return NextResponse.json({ error: 'Failed to update social' }, { status: 500 });
     }
 }
@@ -50,14 +48,13 @@ export async function DELETE(request: Request) {
         const { searchParams } = new URL(request.url);
         const id = searchParams.get('id');
 
-        const data = await fs.readFile(dataPath, 'utf-8');
-        let socials: Social[] = JSON.parse(data);
-
+        let socials = await readBlobData<Social[]>('socials.json');
         socials = socials.filter(s => s.id !== id);
 
-        await fs.writeFile(dataPath, JSON.stringify(socials, null, 2));
+        await writeBlobData('socials.json', socials);
         return NextResponse.json({ success: true });
     } catch (error) {
+        console.error('Failed to delete social:', error);
         return NextResponse.json({ error: 'Failed to delete social' }, { status: 500 });
     }
 }
