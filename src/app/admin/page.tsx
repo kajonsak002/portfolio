@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Profile, Project, Skill } from "@/types/portfolio";
+import { Profile } from "@/types/portfolio";
 
 export default function AdminDashboard() {
     const [stats, setStats] = useState({

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
     const [username, setUsername] = useState("");
@@ -27,7 +28,7 @@ export default function LoginPage() {
             } else {
                 setError("Invalid username or password");
             }
-        } catch (err) {
+        } catch (_err) {
             setError("Login failed. Please try again.");
         }
 
@@ -85,9 +86,9 @@ export default function LoginPage() {
                 </form>
 
                 <p className="text-center text-white/40 text-sm mt-6">
-                    <a href="/" className="hover:text-white transition-colors">
+                    <Link href="/" className="hover:text-white transition-colors">
                         ← Back to site
-                    </a>
+                    </Link>
                 </p>
             </div>
         </div>
